@@ -33,7 +33,6 @@
         $("#send").click(()=> {
             let message = {name: $("#name").val(), message: $("#message").val()};
             postMessage(message);
-            // addMessages({name: "Tim", message: "Hello Tim"})
         })
         console.log('loaded');
         getMessages();

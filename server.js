@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+require('dotenv').config();
 
 const app = express();
 
@@ -15,24 +16,20 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 mongoose.Promise = Promise;
 
-const dbUrl = "mongodb+srv://user:userPassword@cluster0.8b52q.mongodb.net/<dbname>?retryWrites=true&w=majority";
+const dbUrl = process.env.DB_URL;
 
-// mongodb+srv://user:<password>@cluster0.8b52q.mongodb.net/<dbname>?retryWrites=true&w=majority
 
 const Message = mongoose.model('Message', {
     name: String,
     message: String
 });
 
-
-// const messages = [
-//     {name: "Tim", message: "hello"},
-//     {name: "Rob", message: "hi there"}
-// ]
+console.log(process.env.DB_URL, 'secret')
 
 app.get("/messages", (req, res) => {
     Message.find({}, (err, messages) => {
         res.send(messages)
+        
     })
   
 })
@@ -61,14 +58,6 @@ app.post("/messages", async (req, res) => {
 })
 
 
-// Message.findOne({message: "badword"}, (err, censored) => {
-  
-// })
-
-// messages.push(req.body);
-
-
-
 
 io.on('connection', (socket) => {
     console.log("a user connected");
@@ -78,7 +67,6 @@ mongoose.connect(dbUrl, (err) => {
     console.log("mongo db connection", err);
 })
 
-// {useMongoClient: true},
 
 const server = http.listen(3000, () => {
     console.log("server is listening on port running", server.address().port)
